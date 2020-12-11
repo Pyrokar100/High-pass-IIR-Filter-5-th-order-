@@ -17,4 +17,3 @@ synthesize -incremental
 ## Write out synthesized Verilog netlist
 write_hdl -mapped > ../Outputs/Elliptic_synth.v
 gui_show
-
