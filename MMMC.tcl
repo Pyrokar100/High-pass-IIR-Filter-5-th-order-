@@ -1,5 +1,5 @@
 ## Timing constraints file from the synthesis
-create_constraint_mode -name CONSTRAINTS -sdc_files {../Source/FILTER/Cadence/Elliptic14_5.sdc}
+create_constraint_mode -name CONSTRAINTS -sdc_files {../Source/Elliptic.sdc}
 ## Create timing library sets
 13
 ##Example of file «MMMC.tcl»
@@ -16,7 +16,7 @@ create_op_cond -name PVT_slow_1_62V_175C -library_file {/Cadence/Libs/X_FAB/XKIT
 create_op_cond -name PVT_typ_1_80V_25C -library_file {/Cadence/Libs/X_FAB/XKIT/xt018/diglibs/D_CELLS_HD/v4_0/liberty_LP5MOS/v4_0_0/PVT_1_80V_range/D_CELLS_HD_LP5MOS_typ_1_80V_25C.lib} -P {1} -V {1.80} -T {25}
 # The fastest operation condition
 create_op_cond -name PVT_fast_1_98V_-40C -library_file {/Cadence/Libs/X_FAB/XKIT/xt018/diglibs/D_CELLS_HD/v4_0/liberty_LP5MOS/v4_0_0/PVT_1_80V_range/D_CELLS_HD_LP5MOS_fast_1_98V_m40C.lib} -P {1} -V {1.98} -T {-40}
-## Create RC corner(s) from capacitance table(s) 
+## Create RC corner(s) from capacitance table(s)
 #Temperature can be configured by adding "-T {25}"
 create_rc_corner -name RCcornerMIN -cap_table /Cadence/Libs/X_FAB/XKIT/xt018/cadence/v5_0/capTbl/v5_0_1_2/xt018_xx43_MET4_METMID_METTHK_min.capTbl -qx_tech_file /Cadence/Libs/X_FAB/XKIT/xt018/cadence/v7_0/QRC_pvs/v7_0_3/XT018_1243/QRC-Min/qrcTechFile
 create_rc_corner -name RCcornerTYP -cap_table /Cadence/Libs/X_FAB/XKIT/xt018/cadence/v5_0/capTbl/v5_0_1_2/xt018_xx43_MET4_METMID_METTHK_typ.capTbl -qx_tech_file /Cadence/Libs/X_FAB/XKIT/xt018/cadence/v7_0/QRC_pvs/v7_0_3/XT018_1243/QRC-Typ/qrcTechFile
