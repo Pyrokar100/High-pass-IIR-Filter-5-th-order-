@@ -18,4 +18,3 @@ synthesize -incremental
 report timing > ../Reports/Elliptic_synth_timing_report_14MHz_5unc
 report area > ../Reports/Elliptic_synth_area_report_14MHz_5unc
 gui_show
-
