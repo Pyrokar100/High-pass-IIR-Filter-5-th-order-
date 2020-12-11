@@ -317,4 +317,3 @@ end
     end
 
 endmodule  // Elliptic_tb
-
