@@ -15,13 +15,13 @@
 // 
 // Clock Enable  Sample Time
 // -- -------------------------------------------------------------
-// 	           5e-05
+// ce_out        5e-05
 // -- -------------------------------------------------------------
 // 
 // 
 // Output Signal                 Clock Enable  Sample Time
 // -- -------------------------------------------------------------
-// Output_rsvd                   	            5e-05
+// Output_rsvd                   	         5e-05
 // -- -------------------------------------------------------------
 // 
 // -------------------------------------------------------------
@@ -38,6 +38,8 @@
 `timescale 1 ns / 1 ns
 
 module Elliptic_tb;
+
+
 
   reg  clk;
   reg  reset;
@@ -58,8 +60,6 @@ module Elliptic_tb;
   reg signed [14:0] holdData_Input_rsvd;  // sfix15_En4
   reg signed [14:0] Input_rsvd_offset;  // sfix15_En4
   wire signed [14:0] Input_rsvd;  // sfix15_En4
-  reg signed [14:0] Input_rsvd_for_comp_1;
-  reg signed [14:0] Input_rsvd_for_comp;
   reg  check1_done;  // ufix1
   wire snkDonen;
   wire resetn;
@@ -70,24 +70,30 @@ module Elliptic_tb;
   wire [15:0] Output_rsvd_addr_delay_1;  // ufix16
   reg signed [31:0] fp_Output_rsvd_expected;  // sfix32
   reg signed [14:0] Output_rsvd_expected;  // sfix15_En4
-  reg signed [31:0] status_Output_rsvd_expected;  // sfix32
   reg signed [14:0] Output_rsvd_expected_1; 
   reg signed [14:0] Output_rsvd_expected_2; 
+  reg signed [31:0] status_Output_rsvd_expected;  // sfix32
   wire signed [14:0] Output_rsvd_ref;  // sfix15_En4
   reg  Output_rsvd_testFailure;  // ufix1
   wire testFailure;  // ufix1
 
 
+
+
   assign Output_rsvd_done_enb = Output_rsvd_done & rdEnb;
+
 
 
   assign Output_rsvd_active = Output_rsvd_addr != 16'b1001110001000000;
 
 
+
   assign Signal_From_Workspace_out1_active = Signal_From_Workspace_out1_addr != 16'b1001110001000000;
 
 
+
   assign Signal_From_Workspace_out1_enb = Signal_From_Workspace_out1_active & (rdEnb & tb_enb_delay);
+
 
 
   // Count limited, Unsigned Counter
@@ -110,6 +116,7 @@ module Elliptic_tb;
         end
       end
     end
+
 
 
   assign #1 Signal_From_Workspace_out1_addr_delay_1 = Signal_From_Workspace_out1_addr;
@@ -165,6 +172,7 @@ module Elliptic_tb;
   assign tb_enb = resetn & snkDonen;
 
 
+
   // Delay inside enable generation: register depth 1
   always @(posedge clk or posedge reset)
     begin : u_enable_delay
@@ -195,14 +203,14 @@ module Elliptic_tb;
   always 
     begin : clk_gen
       clk <= 1'b1;
-      # (5);
+      # (34);
       clk <= 1'b0;
-      # (5);
+      # (34);
       if (check1_done == 1'b1) begin
         clk <= 1'b1;
-        # (5);
+        # (34);
         clk <= 1'b0;
-        # (5);
+        # (34);
         $stop;
       end
     end
@@ -214,7 +222,12 @@ module Elliptic_tb;
                        .Output_rsvd(Output_rsvd)  // sfix15_En4
                        );
 
+
+initial
+$sdf_annotate("../Outputs/Elleptic_MAX.sdf", u_Elliptic);
+
   assign Output_rsvd_enb = clk_enable & Output_rsvd_active;
+
 
 
   // Count limited, Unsigned Counter
@@ -245,6 +258,7 @@ module Elliptic_tb;
 
 
   assign Output_rsvd_done = Output_rsvd_lastAddr & resetn;
+
 
 
   // Delay to allow last sim cycle to complete
@@ -283,8 +297,6 @@ always @(posedge clk)
 begin
 Output_rsvd_expected_1 <= Output_rsvd_expected;
 Output_rsvd_expected_2 <= Output_rsvd_expected_1;
-Input_rsvd_for_comp_1 <= Input_rsvd;
-Input_rsvd_for_comp   <= Input_rsvd_for_comp_1;
 end
 
   assign Output_rsvd_ref = Output_rsvd_expected_2;

@@ -1,4 +1,4 @@
-set FCLK   14;                  #desired Fclk
+set FCLK   25;                  #desired Fclk
 set UNCERT 5;                    #desired % from Fclk for clock uncertainty
 
 ############GROUP PATH and PORTS for STA################

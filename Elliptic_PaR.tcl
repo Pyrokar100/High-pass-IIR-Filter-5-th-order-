@@ -36,18 +36,21 @@ set pegDetailResScaleFactor 1.000000
 set timing_library_float_precision_tol 0.000010
 set timing_library_load_pin_cap_indices {}
 set tso_post_client_restore_command {update_timing ; write_eco_opt_db ;}
+#defining floorplan
 init_design
 getIoFlowFlag
 setIoFlowFlag 0
 floorPlan -site core_hd -r 0.992380270313 0.7 9.52 9.52 9.52 9.52
 uiSetTool select
 getIoFlowFlag
+#defining global net's connection
 fit
 clearGlobalNets
 globalNetConnect VDD -type pgpin -pin vdd -inst * -module {}
 globalNetConnect VDD -type tiehi -pin * -inst * -module {}
 globalNetConnect VSS -type pgpin -pin gnd -inst * -module {}
 globalNetConnect VSS -type tielo -pin * -inst * -module {}
+#creating power ring and stripes
 set sprCreateIeRingNets {}
 set sprCreateIeRingLayers {}
 set sprCreateIeRingWidth 1.0
@@ -67,18 +70,21 @@ redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/nu
 timeDesign -prePlace -idealClock -pathReports -drvReports -slackReports -numPaths 50 -prefix Elliptic_prePlace -outDir ../Reports9/Pre-Place(5unc_14MHz)
 setMultiCpuUsage -localCpu 8 -cpuPerRemoteHost 1 -remoteHost 0 -keepLicense true
 setDistributeHost -local
+#Placing of standart cells
 setPlaceMode -fp false
 placeDesign -inPlaceOpt
 redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/null
 timeDesign -preCTS -idealClock -pathReports -drvReports -slackReports -numPaths 50 -prefix Elliptic_preCTS -outDir ../Reports9/Pre-CTS(5unc_14MHz)
 redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/null
 timeDesign -preCTS -hold -idealClock -pathReports -slackReports -numPaths 50 -prefix Elliptic_preCTS -outDir ../Reports9/Pre-CTS(5unc_14MHz)
+#preCTS Optimization
 setOptMode -fixCap true -fixTran true -fixFanoutLoad true
 optDesign -preCTS
 redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/null
 timeDesign -preCTS -idealClock -pathReports -drvReports -slackReports -numPaths 50 -prefix Elliptic_preCTS_OPTIM -outDir ../Reports9/Pre-CTS(5unc_14MHz)
 redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/null
 timeDesign -preCTS -hold -idealClock -pathReports -slackReports -numPaths 50 -prefix Elliptic_preCTS_OPTIM -outDir ../Reports9/Pre-CTS(5unc_14MHz)
+#creating CTS
 createClockTreeSpec -bufferList {BUHDX0 BUHDX1 BUHDX12 BUHDX2 BUHDX3 BUHDX4 BUHDX6 BUHDX8} -file Clock.ctstch
 createClockTreeSpec -bufferList {BUHDX0 BUHDX1 BUHDX12 BUHDX2 BUHDX3 BUHDX4 BUHDX6 BUHDX8} -file Clock.ctstch
 setCTSMode -engine ck
@@ -87,6 +93,7 @@ redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/nu
 timeDesign -postCTS -pathReports -drvReports -slackReports -numPaths 50 -prefix Elliptic_postCTS -outDir ../Reports9/Post-CTS(5unc_14MHz)
 redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/null
 timeDesign -postCTS -hold -pathReports -slackReports -numPaths 50 -prefix Elliptic_postCTS -outDir ../Reports9/Post-CTS(5unc_14MHz)
+#postCTS Optimization
 setOptMode -fixCap true -fixTran true -fixFanoutLoad true
 optDesign -postCTS
 optDesign -postCTS -hold
@@ -94,16 +101,10 @@ redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/nu
 timeDesign -postCTS -pathReports -drvReports -slackReports -numPaths 50 -prefix Elliptic_postCTS_OPTIM -outDir ../Reports9/Post-CTS(5unc_14MHz)
 redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/null
 timeDesign -postCTS -hold -pathReports -slackReports -numPaths 50 -prefix Elliptic_postCTS_OPTIM -outDir ../Reports9/Post-CTS(5unc_14MHz)
+#Rooting
 setNanoRouteMode -quiet -routeInsertAntennaDiode 1
 setNanoRouteMode -quiet -timingEngine {}
 setNanoRouteMode -quiet -routeWithSiPostRouteFix 0
-setNanoRouteMode -quiet -drouteStartIteration default
-setNanoRouteMode -quiet -routeTopRoutingLayer default
-setNanoRouteMode -quiet -routeBottomRoutingLayer default
-setNanoRouteMode -quiet -drouteEndIteration default
-setNanoRouteMode -quiet -routeWithTimingDriven false
-setNanoRouteMode -quiet -routeWithSiDriven false
-routeDesign -globalDetail
 setNanoRouteMode -quiet -drouteStartIteration default
 setNanoRouteMode -quiet -routeTopRoutingLayer default
 setNanoRouteMode -quiet -routeBottomRoutingLayer default
@@ -116,10 +117,10 @@ redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/nu
 timeDesign -postRoute -pathReports -drvReports -slackReports -numPaths 50 -prefix Elliptic_postRoute -outDir ../Reports9/Post-Route(5unc_14MHz)
 redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/null
 timeDesign -postRoute -hold -pathReports -slackReports -numPaths 50 -prefix Elliptic_postRoute -outDir ../Reports9/Post-Route(5unc_14MHz)
+#postRoute Optimization
 setOptMode -fixCap true -fixTran true -fixFanoutLoad true
 optDesign -postRoute
 optDesign -postRoute -hold
-#redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/null
 setOptMode -fixCap true -fixTran true -fixFanoutLoad true
 optDesign -postRoute
 optDesign -postRoute -hold
@@ -129,6 +130,7 @@ redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/nu
 timeDesign -postRoute -pathReports -drvReports -slackReports -numPaths 50 -prefix Elliptic_postRoute_OPTIM -outDir ../Reports9/Post-Route(5unc_14MHz)
 redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/null
 timeDesign -postRoute -hold -pathReports -slackReports -numPaths 50 -prefix Elliptic_postRoute_OPTIM -outDir ../Reports9/Post-Route(5unc_14MHz)
+#SignOff
 getFillerMode -quiet
 addFiller -cell FEED7HD FEED5HD FEED3HD FEED2HD FEED25HD FEED1HD FEED15HD FEED10HD DECAP10HD DECAP15HD DECAP25HD DECAP3HD DECAP5HD DECAP7HD -prefix FILLER
 setExtractRCMode -engine postRoute -effortLevel signoff
@@ -137,6 +139,7 @@ redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/nu
 timeDesign -signoff -pathReports -drvReports -slackReports -numPaths 50 -prefix Elliptic_signOff -outDir ../Reports9/Sign-off(5unc_14MHz)
 redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/null
 timeDesign -signoff -hold -pathReports -slackReports -numPaths 50 -prefix Elliptic_signOff -outDir ../Reports9/Sign-off(5unc_14MHz)
+#Verifications
 fit
 setVerifyGeometryMode -area { 0 0 0 0 } -minWidth true -minSpacing true -minArea true -sameNet true -short true -overlap true -offRGrid false -offMGrid true -mergedMGridCheck true -minHole true -implantCheck true -minimumCut true -minStep true -viaEnclosure true -antenna false -insuffMetalOverlap true -pinInBlkg false -diffCellViol true -sameCellViol false -padFillerCellsOverlap true -routingBlkgPinOverlap true -routingCellBlkgOverlap true -regRoutingOnly false -stackedViasOnRegNet false -wireExt true -useNonDefaultSpacing false -maxWidth true -maxNonPrefLength -1 -error 1000
 verifyGeometry
@@ -163,6 +166,7 @@ verifyCutDensity
 verifyPowerVia
 all_hold_analysis_views 
 all_setup_analysis_views 
+#writing output files
 write_sdf ../Outputs/Elliptic.sdf
 write_sdf -view MAXview ../Outputs/Elliptic_MAX.sdf
 write_sdf -view MINview ../Outputs/Elliptic_MIN.sdf

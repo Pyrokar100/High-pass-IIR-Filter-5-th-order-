@@ -9,13 +9,12 @@ read_hdl -v2001 ../Source/Elliptic.v
 ## Compile our code (create a technology-independent schematic)
 elaborate -parameters $PARAMS $DESIGN
 ## Setup design constraints
-read_sdc ../Source/Elliptic.sdc
+read_sdc ../Source/Elliptic_25.sdc
 ## Synthesize our schematic (create a technology-dependent schematic)
 synthesize -to_generic
 synthesize -to_mapped
 synthesize -incremental
-## Write out area and timing reports
-report timing > ../Reports/Elliptic_synth_timing_report_14MHz_5unc
-report area > ../Reports/Elliptic_synth_area_report_14MHz_5unc
+## Write out synthesized Verilog netlist
+write_hdl -mapped > ../Outputs/Elliptic_synth.v
 gui_show
 

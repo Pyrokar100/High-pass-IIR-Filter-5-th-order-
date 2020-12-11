@@ -44,13 +44,11 @@ module Elliptic
            Input_rsvd,
            Output_rsvd);
 
-
   input   clk;
   input   reset;
   input   clk_enable;
   input   signed [14:0] Input_rsvd;  // sfix15_En4
   output  signed [14:0] Output_rsvd;  // sfix15_En4
-
 
   reg  signed [14:0] Input_rsvd_REG;
   wire signed [32:0] s_1_mul_temp;  // sfix33_En21
