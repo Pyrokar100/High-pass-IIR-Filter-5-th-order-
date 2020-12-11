@@ -166,7 +166,7 @@ verifyCutDensity
 verifyPowerVia
 all_hold_analysis_views 
 all_setup_analysis_views 
-#writing output files
+#writing output files 
 write_sdf ../Outputs/Elliptic.sdf
 write_sdf -view MAXview ../Outputs/Elliptic_MAX.sdf
 write_sdf -view MINview ../Outputs/Elliptic_MIN.sdf
