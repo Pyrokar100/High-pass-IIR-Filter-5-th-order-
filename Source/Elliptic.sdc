@@ -23,6 +23,6 @@ set FEEDTHROUGH_DELAY_CLK  [expr $PERIOD_CLK/3.0]; #33% from Tclk
 
 create_clock [get_ports clk] -name clk -period $PERIOD_CLK
 set_clock_uncertainty $CLOCK_UNCERTAINTY_CLK [get_clocks {clk}]
-
+ 
 set_input_delay  -clock "clk"       -max $INPUT_DELAY_CLK  $INPUTPORTS_CLK
 set_output_delay -clock "clk"       -max $OUTPUT_DELAY_CLK $OUTPUTPORTS_CLK
