@@ -38,14 +38,8 @@ set timing_library_load_pin_cap_indices {}
 set tso_post_client_restore_command {update_timing ; write_eco_opt_db ;}
 #defining floorplan
 init_design
-getIoFlowFlag
-setIoFlowFlag 0
 floorPlan -site core_hd -r 0.992380270313 0.7 9.52 9.52 9.52 9.52
-uiSetTool select
-getIoFlowFlag
 #defining global net's connection
-fit
-clearGlobalNets
 globalNetConnect VDD -type pgpin -pin vdd -inst * -module {}
 globalNetConnect VDD -type tiehi -pin * -inst * -module {}
 globalNetConnect VSS -type pgpin -pin gnd -inst * -module {}
@@ -140,7 +134,6 @@ timeDesign -signoff -pathReports -drvReports -slackReports -numPaths 50 -prefix 
 redirect -quiet {set honorDomain [getAnalysisMode -honorClockDomains]} > /dev/null
 timeDesign -signoff -hold -pathReports -slackReports -numPaths 50 -prefix Elliptic_signOff -outDir ../Reports9/Sign-off(5unc_14MHz)
 #Verifications
-fit
 setVerifyGeometryMode -area { 0 0 0 0 } -minWidth true -minSpacing true -minArea true -sameNet true -short true -overlap true -offRGrid false -offMGrid true -mergedMGridCheck true -minHole true -implantCheck true -minimumCut true -minStep true -viaEnclosure true -antenna false -insuffMetalOverlap true -pinInBlkg false -diffCellViol true -sameCellViol false -padFillerCellsOverlap true -routingBlkgPinOverlap true -routingCellBlkgOverlap true -regRoutingOnly false -stackedViasOnRegNet false -wireExt true -useNonDefaultSpacing false -maxWidth true -maxNonPrefLength -1 -error 1000
 verifyGeometry
 setVerifyGeometryMode -area { 0 0 0 0 }
