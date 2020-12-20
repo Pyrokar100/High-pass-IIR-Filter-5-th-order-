@@ -124,7 +124,7 @@ module Elliptic_tb;
   // Data source for Input_rsvd
   initial
     begin : Input_rsvd_fileread
-      fp_Input_rsvd = $fopen("Input_rsvd.dat", "r");
+      fp_Input_rsvd = $fopen("../Source/Input_rsvd.dat", "r");
       status_Input_rsvd = $rewind(fp_Input_rsvd);
     end
 
@@ -279,7 +279,7 @@ $sdf_annotate("../Outputs/Elleptic_MAX.sdf", u_Elliptic);
   // Data source for Output_rsvd_expected
   initial
     begin : Output_rsvd_expected_fileread
-      fp_Output_rsvd_expected = $fopen("Output_rsvd_expected.dat", "r");
+      fp_Output_rsvd_expected = $fopen("../Source/Output_rsvd_expected.dat", "r");
       status_Output_rsvd_expected = $rewind(fp_Output_rsvd_expected);
     end
 
